@@ -1,51 +1,83 @@
-NAME = philo
+NAME := philosopher
 
-SRCS =  main.c \
-		utils.c \
-		parsing.c \
-		philosopher.c \
-		table_creation.c \
+# --- SRC/DIR --- #
 
-PATH_SRCS = src/
+SRC_DIR := src/
 
-UTILS = obj
+SRCS :=	main.c \
+					utils.c \
+					parsing.c \
+					philosopher.c \
+					table_creation.c \
 
-OBJS = $(addprefix $(UTILS)/,$(SRCS:.c=.o))
-DEPS = $(addprefix $(UTILS)/,$(SRCS:.c=.d))
 
-INCLUDE_DIRS = -Iinclude
+# --- LIBS TARGET --- #
+
+LIBS_TARGET :=
+
+LIBS :=
+
+# --- INCLUDES --- #
+
+INCLUDES := includes/
+
+# --- OBJS/DEPS --- #
+
+OBJS_DIR := .build/objs/
+
+OBJS := $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
+
+
+DEPS := $(OBJS:.o=.d)
+
+# --- FLAGS --- #
+
+CPPFLAGS += -MMD -MP $(addprefix -I,$(INCLUDES)) \
+					 $(addprefix -I,$(addsuffix $(INCLUDES),$(dir $(LIBS_TARGET))))
+
+CFLAGS += -g3 -Wall -Wextra -Werror
+
+LFLAGS += 	$(addprefix -L,$(dir $(LIBS_TARGET))) \
+			$(addprefix -l,$(LIBS)) \
+			-lreadline
+
+# --- COMPILATER --- #
 
 CC = cc
-CPPFLAGS += -MMD -MP $(INCLUDE_DIRS)
-CFLAGS += -Wall -Werror -Wextra -g3
 
-all: $(NAME)
+# --- EXEC --- #
 
-$(NAME): $(OBJS)
-	$(CC) $^ -o $@ -lX11 -lXext -lm
+all : $(NAME)
 
-$(UTILS)/%.o: $(PATH_SRCS)%.c | $(UTILS)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<  -o $@
+$(NAME) : $(LIBS_TARGET) $(OBJS)
+	$(CC) $^ $(LFLAGS) -o $@
 
-$(UTILS):
-	@mkdir -p $(UTILS)
+$(OBJS_DIR)%.o: $(SRC_DIR)%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
-$(PATH_LIBS_ft): force
-	$(MAKE) -C $(dir $(PATH_LIBS_ft))
-
-$(PATH_LIBS_libx): force
-	$(MAKE) -C $(dir $(PATH_LIBS_libx))
+$(LIBS_TARGET) : force
+	$(MAKE) -C $(dir $@)
 
 force:
 
--include $(DEPS)
+.PHONY : clean fclean all re print-% debug force
 
 clean:
-	rm -rf $(UTILS)
+	rm -rf .build
 
 fclean: clean
-	rm -f $(NAME)
+	rm -rf $(NAME)
 
-re: fclean all
+re:
+	$(MAKE) fclean
+	$(MAKE) all
 
-.PHONY: clean fclean re
+debug: $(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline.supp ./$(NAME)
+
+print-%:
+	@echo $(patsubst print-%,%,$@)=
+	@echo $($(patsubst print-%,%,$@))
+
+-include $(DEPS)

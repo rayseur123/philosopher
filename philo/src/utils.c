@@ -6,16 +6,22 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 15:18:57 by njooris           #+#    #+#             */
-/*   Updated: 2025/03/28 10:07:14 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/04 15:31:36 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <sys/time.h>
+#include "dinner.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 int	ft_isdigit(int x)
 {
 	return (x >= '0' && x <= '9');
 }
 
-int	ft_atoi(const char *nptr, int *check) // edit cet atoi pour ne recevoir que des nombres
+int	ft_atoi(const char *nptr, int *check)
 {
 	int				x;
 	long long int	val;
@@ -45,3 +51,84 @@ int	ft_atoi(const char *nptr, int *check) // edit cet atoi pour ne recevoir que 
 	return (val * negativ);
 }
 
+t_table	free_table(t_table table, unsigned int size_malloc)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < size_malloc)
+	{
+		if (i == 0)
+		{
+			free(table.table[i].fork_left);
+			free(table.table[i].fork_right);
+		}
+		else if (i != table.nb_chair - 1)
+			free(table.table[i].fork_left);
+		i++;
+	}
+	free(table.table);
+	table.table = NULL;
+	return (table);
+}
+
+t_time_to set_time_to(t_data data)
+{
+	t_time_to time;
+
+	time.time_must_eat = data.time_must_eat;
+	time.time_to_die = data.time_to_die;
+	time.time_to_eat = data.time_to_eat;
+	time.time_to_sleep = data.time_to_sleep;
+	return (time); 
+}
+
+void	ft_msleep(int time)
+{
+	usleep(time * 1000);
+}
+
+int		ft_msleep_check_last_eat(int time, t_pack_data p_data)
+{
+	int	i;
+	int	check;
+
+	i = 0;
+	check = 1;
+	while (i < time) // pontentielement changer la condition de la boucle
+	{
+		usleep(1000);
+		if ((time_start_init() - p_data.philo->last_eat) >= p_data.time_to.time_to_die)
+		{
+			pthread_mutex_lock(&p_data.start->mutex);
+			p_data.start->start = 0;
+			pthread_mutex_unlock(&p_data.start->mutex);
+			print_timestamp_philo(p_data.philo->seat, DEAD, p_data.timestart);
+			return (1);
+		}
+		pthread_mutex_lock(&p_data.start->mutex);
+		check = p_data.start->start;
+		pthread_mutex_unlock(&p_data.start->mutex);
+		if (!check)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	print_timestamp_philo(unsigned int philo, int action, unsigned long int timestart)
+{
+	unsigned long int	timestamp;
+
+	timestamp = time_start_init() - timestart;
+	if (action == TAKE_FORK)
+		printf("%lu %d has taken a fork\n",  timestamp, philo);
+	else if (action == THINK)
+		printf("%lu %d is thinking\n", timestamp, philo);
+	else if (action == EAT)
+		printf("%lu %d is eating\n", timestamp, philo);
+	else if (action == SLEEP)
+		printf("%lu %d is sleeping\n", timestamp, philo);
+	else if (action == DEAD)
+		printf("%lu %d died\n", timestamp, philo);
+}

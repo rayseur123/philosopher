@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:37:23 by njooris           #+#    #+#             */
-/*   Updated: 2025/03/28 14:42:37 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/01 14:10:34 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ t_fork	*set_fork()
 	fork1 = malloc(sizeof(t_fork));
 	if (!fork1)
 		return (NULL);
+	fork1->fork = 0;
+	pthread_mutex_init(&fork1->mutex, NULL);
 	return (fork1);
 }
 
@@ -29,7 +31,7 @@ t_philo	set_philo(t_fork *fork1, t_fork *fork2, int i)
 	t_philo philo;
 
 	philo.etat = THINK;
-	philo.seat = i;
+	philo.seat = i + 1;
 	philo.fork_left = fork1;
 	philo.fork_right = fork2;
 	return (philo);
@@ -45,7 +47,7 @@ int	give_fork_to_philo(t_table table, t_fork *fork1, t_fork *fork2, int i)
 
 t_table	seating_arrangement(t_table table)
 {
-	int	i;
+	unsigned int	i;
 
 	i = -1;
 	while (++i < table.nb_chair)
