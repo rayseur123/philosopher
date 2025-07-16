@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:24:38 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/04 16:05:09 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/16 11:57:02 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,13 @@ typedef struct s_have_eat
 
 typedef struct s_pack_data
 {
-	t_have_eat		have_eat;
-	t_philo			*philo;
+	unsigned int				*nb_philo;
+	pthread_mutex_t				mutex;
+	t_have_eat					have_eat;
+	t_philo						*philo;
 	unsigned long int			timestart;
-	t_time_to 	time_to;
-	t_start		*start;
+	t_time_to 					time_to;
+	t_start						*start;
 }	t_pack_data;
 
 // seter
@@ -82,7 +84,7 @@ t_table		free_table(t_table table, unsigned int size_malloc);
 void		philosopher(t_data data);
 void		ft_msleep(int time);
 int			ft_msleep_check_last_eat(int time, t_pack_data p_data);
-void		print_timestamp_philo(unsigned int philo, int action, unsigned long int timestart);
+void		print_timestamp_philo(t_pack_data p_data, int action);
 unsigned long	time_start_init();
 
 #endif

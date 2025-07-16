@@ -39,7 +39,6 @@ CFLAGS += -g3 -Wall -Wextra -Werror
 
 LFLAGS += 	$(addprefix -L,$(dir $(LIBS_TARGET))) \
 			$(addprefix -l,$(LIBS)) \
-			-lreadline
 
 # --- COMPILATER --- #
 
@@ -74,7 +73,7 @@ re:
 	$(MAKE) all
 
 debug: $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=valgrind_readline.supp ./$(NAME)
+	valgrind --tool=helgrind ./$(NAME) 5 400 200 200
 
 print-%:
 	@echo $(patsubst print-%,%,$@)=
