@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 15:53:50 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/21 14:46:56 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/21 15:19:19 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,10 @@ int	philo_eat(t_pack_data *p_data)
 		print_timestamp_philo(*p_data, EAT);
 		p_data->philo->last_eat = time_start_init();
 		if (ft_msleep_check_last_eat(p_data->time_to.time_to_eat, *p_data))
+		{
+			drop_fork(p_data->philo->fork_left, p_data->philo->fork_right);
 			return (1);
+		}
 		drop_fork(p_data->philo->fork_left, p_data->philo->fork_right);
 	}
 	else
@@ -101,7 +104,10 @@ int	philo_eat(t_pack_data *p_data)
 		print_timestamp_philo(*p_data, EAT);
 		p_data->philo->last_eat = time_start_init();
 		if (ft_msleep_check_last_eat(p_data->time_to.time_to_eat, *p_data))
+		{
+			drop_fork(p_data->philo->fork_right, p_data->philo->fork_left);
 			return (1);
+		}
 		drop_fork(p_data->philo->fork_right, p_data->philo->fork_left);
 	}
 	return (0);
