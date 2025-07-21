@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 15:53:50 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/21 14:01:59 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/21 14:46:56 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	try_fork(t_pack_data *p_data, t_fork *fork)
 		check = p_data->start->start;
 		pthread_mutex_unlock(&p_data->start->mutex);
 		if (!check)
-			return (1);
+		return (1);
 		pthread_mutex_lock(&fork->mutex);
 		val = fork->fork;
 		if (!val)
@@ -137,17 +137,17 @@ void	*do_actions(void *data)
 		i++;
 		if (i == p_data->time_to.time_must_eat)
 		{
-			pthread_mutex_lock(&p_data->mutex);
+			pthread_mutex_lock(p_data->mutex_philo);
 			(*p_data->nb_philo)--;
-			pthread_mutex_unlock(&p_data->mutex);
+			pthread_mutex_unlock(p_data->mutex_philo);
 		}
-		pthread_mutex_lock(&p_data->mutex);
+		pthread_mutex_lock(p_data->mutex_philo);
 		if (!*p_data->nb_philo)
 		{
-			pthread_mutex_unlock(&p_data->mutex);
+			pthread_mutex_unlock(p_data->mutex_philo);
 			return (0);
 		}
-		pthread_mutex_unlock(&p_data->mutex);
+		pthread_mutex_unlock(p_data->mutex_philo);
 		if (philo_sleep(p_data))
 			return (NULL);
 	}
@@ -161,15 +161,18 @@ void	start_simulation(t_table table, t_time_to time_to)
 	t_pack_data						*p_data;
 	t_start							start;
 	unsigned int					nb_philo;
+	pthread_mutex_t					mutex_philo;
 
 	i = 0;
 	start.start = 0;
 	time_start = time_start_init();
 	pthread_mutex_init(&start.mutex, NULL);
+	pthread_mutex_init(&mutex_philo, NULL);
 	nb_philo = table.nb_chair;
 	while(i < nb_philo)
 	{
 		p_data = init_packdata(time_start, time_to, &table.table[i], &start);
+		p_data->mutex_philo = &mutex_philo;
 		p_data->nb_philo = &nb_philo;
 		if (!p_data || pthread_create(&table.table[i].thread, NULL, &do_actions, p_data) == -1)
 			break ;

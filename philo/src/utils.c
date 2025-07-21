@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 15:18:57 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/21 14:01:36 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/21 14:20:03 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	print_timestamp_philo(t_pack_data p_data, int action)
 	pthread_mutex_unlock(&p_data.start->mutex);
 	if (!check)
 		return ;
-	pthread_mutex_lock(&p_data.mutex);
+	pthread_mutex_lock(p_data.mutex_philo);
 	if (action == TAKE_FORK)
 		printf("%lu %d has taken a fork\n",  timestamp, p_data.philo->seat);
 	else if (action == THINK)
@@ -135,4 +135,5 @@ void	print_timestamp_philo(t_pack_data p_data, int action)
 		printf("%lu %d is eating\n", timestamp, p_data.philo->seat);
 	else if (action == SLEEP)
 		printf("%lu %d is sleeping\n", timestamp, p_data.philo->seat);
+	pthread_mutex_unlock(p_data.mutex_philo);
 }

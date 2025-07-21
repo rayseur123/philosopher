@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:24:38 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/21 14:01:23 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/21 14:05:42 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_have_eat
 typedef struct s_pack_data
 {
 	unsigned int				*nb_philo;
-	pthread_mutex_t				mutex;
+	pthread_mutex_t				*mutex_philo;
 	t_have_eat					have_eat;
 	t_philo						*philo;
 	unsigned long int			timestart;
