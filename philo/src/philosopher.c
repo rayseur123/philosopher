@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 15:53:50 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/16 12:15:43 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/21 14:01:59 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,6 @@ t_pack_data	*init_packdata(unsigned long int time_start, t_time_to time_to, t_ph
 	p_data->timestart = time_start;
 	p_data->philo = philo;
 	return (p_data);
-}
-
-void	display_pdt(t_pack_data	p_data)
-{
-	printf("PHILO : \n");
-	printf("fork right : %d\n", p_data.philo->etat);
-	printf("fork left : %p\n", p_data.philo->fork_left);
-	printf("fork right : %p\n", p_data.philo->fork_right);
-	printf("seat : %d\n", p_data.philo->seat);
-	printf("TIME TO : \n");
-	printf("time must eat : %lu\n", p_data.time_to.time_must_eat);
-	printf("time to die : %lu\n", p_data.time_to.time_to_die);
-	printf("time to eat : %lu\n", p_data.time_to.time_to_eat);
-	printf("time to sleep : %lu\n", p_data.time_to.time_to_sleep);
-	printf("time start : %lu\n", p_data.timestart);
-	printf("\n");
 }
 
 unsigned long	time_start_init()
@@ -99,7 +83,7 @@ int	philo_eat(t_pack_data *p_data)
 	unsigned long	start_think;
 
 	print_timestamp_philo(*p_data, THINK);
-	start_think = time_start_init(); // utiliser pour check si le philo prend trop de temps
+	start_think = time_start_init();
 	if (p_data->philo->seat % 2)
 	{
 		try_fork(p_data, p_data->philo->fork_left);
@@ -131,7 +115,7 @@ int	philo_sleep(t_pack_data *p_data)
 	return (0);
 }
 
-void	*do_actions(void *data) // on est dans le thread ici
+void	*do_actions(void *data)
 {
 	t_pack_data	*p_data;
 	bool 		check;
@@ -179,9 +163,9 @@ void	start_simulation(t_table table, t_time_to time_to)
 	unsigned int					nb_philo;
 
 	i = 0;
+	start.start = 0;
 	time_start = time_start_init();
 	pthread_mutex_init(&start.mutex, NULL);
-	start.start = 0;
 	nb_philo = table.nb_chair;
 	while(i < nb_philo)
 	{
@@ -191,6 +175,7 @@ void	start_simulation(t_table table, t_time_to time_to)
 			break ;
 		i++;
 	}
+	printf("Start simulation !\n");
 	pthread_mutex_lock(&start.mutex);
 	start.start = 1;
 	pthread_mutex_unlock(&start.mutex);

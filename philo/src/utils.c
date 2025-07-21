@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 15:18:57 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/16 12:49:18 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/21 14:01:36 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +83,16 @@ t_time_to set_time_to(t_data data)
 	return (time); 
 }
 
-void	ft_msleep(int time)
-{
-	usleep(time * 1000);
-}
 
-int		ft_msleep_check_last_eat(int time, t_pack_data p_data)
+int		ft_msleep_check_last_eat(unsigned long time, t_pack_data p_data)
 {
-	int	i;
 	int	check;
+	unsigned long time_start;
 
-	i = 0;
 	check = 1;
-	while (i < time) // pontentielement changer la condition de la boucle
+	time_start = time_start_init();
+	while (time_start_init() - time_start <= time) // pontentielement changer la condition de la boucle
 	{
-		usleep(1000);
 		pthread_mutex_lock(&p_data.start->mutex);
 		check = p_data.start->start;
 		pthread_mutex_unlock(&p_data.start->mutex);
@@ -108,7 +103,7 @@ int		ft_msleep_check_last_eat(int time, t_pack_data p_data)
 			print_timestamp_philo(p_data, DEAD);
 			return (1);
 		}
-		++i;
+		usleep(200);
 	}
 	return (0);
 }

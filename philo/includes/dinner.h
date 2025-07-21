@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 16:24:38 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/16 11:57:02 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/21 14:01:23 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,7 @@ t_table	seating_arrangement(t_table table);
 // other
 t_table		free_table(t_table table, unsigned int size_malloc);
 void		philosopher(t_data data);
-void		ft_msleep(int time);
-int			ft_msleep_check_last_eat(int time, t_pack_data p_data);
+int			ft_msleep_check_last_eat(unsigned long time, t_pack_data p_data);
 void		print_timestamp_philo(t_pack_data p_data, int action);
 unsigned long	time_start_init();
 

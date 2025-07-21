@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 12:55:12 by njooris           #+#    #+#             */
-/*   Updated: 2025/03/31 11:04:02 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/17 15:18:14 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	main(int ac, char **av)
 		return(1);
 	}
 	data = parsing(ac, av, &check);
+	if (data.time_must_eat == 0)
+		return (0);
 	if (!check)
 	{
 		printf("BAD PARAMS\n");

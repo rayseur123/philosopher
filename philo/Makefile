@@ -35,10 +35,11 @@ DEPS := $(OBJS:.o=.d)
 CPPFLAGS += -MMD -MP $(addprefix -I,$(INCLUDES)) \
 					 $(addprefix -I,$(addsuffix $(INCLUDES),$(dir $(LIBS_TARGET))))
 
-CFLAGS += -g3 -Wall -Wextra -Werror
+CFLAGS += -Wall -Wextra -Werror -g3
 
 LFLAGS += 	$(addprefix -L,$(dir $(LIBS_TARGET))) \
 			$(addprefix -l,$(LIBS)) \
+			
 
 # --- COMPILATER --- #
 

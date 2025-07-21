@@ -6,7 +6,7 @@
 /*   By: njooris <njooris@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 14:37:23 by njooris           #+#    #+#             */
-/*   Updated: 2025/07/01 14:10:34 by njooris          ###   ########.fr       */
+/*   Updated: 2025/07/21 13:03:40 by njooris          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_table	set_the_table(t_data data)
 	table.nb_chair = data.nb_philo;
 	table.table = malloc(sizeof(t_philo) * table.nb_chair);
 	if (!table.table)
-		return table;
+		return (table);
 	table = seating_arrangement(table);
 	return (table);
 }
