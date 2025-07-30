@@ -1,8 +1,0 @@
-{
-	"files.associations": {
-		"dinner.h": "c",
-		"stdio.h": "c",
-		"parsing.h": "c",
-		"time.h": "c"
-	}
-}
